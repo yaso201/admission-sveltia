@@ -1,0 +1,8 @@
+name = "sveltia-cms-auth"
+main = "src/index.js"
+compatibility_date = "2023-03-24"
+
+# Domaines autorisés à utiliser l'authentificateur (wildcards OK).
+# Couvre recette + prod + vitrine. Les secrets GitHub se posent dans le dashboard.
+[vars]
+ALLOWED_DOMAINS = "*.lanem.bj,lanem.bj"
