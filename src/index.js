@@ -23,6 +23,15 @@ const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const outputHTML = ({ provider = 'unknown', token, error, errorCode }) => {
   const state = error ? 'error' : 'success';
   const content = error ? { provider, error, errorCode } : { provider, token };
+  // Defense-in-depth : JSON.stringify n'échappe pas < > & U+2028/2029 → en contexte
+  // <script> un éventuel "</script>" casserait la balise. Inputs actuels sûrs (provider
+  // validé, token de confiance, erreurs codées en dur), mais on neutralise le motif.
+  const safeContent = JSON.stringify(content)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\u2028')
+    .replace(/\u2029/g, '\u2029');
 
   return new Response(
     `
@@ -31,7 +40,7 @@ const outputHTML = ({ provider = 'unknown', token, error, errorCode }) => {
           window.addEventListener('message', ({ data, origin }) => {
             if (data === 'authorizing:${provider}') {
               window.opener?.postMessage(
-                'authorization:${provider}:${state}:${JSON.stringify(content)}',
+                'authorization:${provider}:${state}:${safeContent}',
                 origin
               );
             }
