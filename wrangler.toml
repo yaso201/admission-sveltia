@@ -2,7 +2,7 @@ name = "admission-sveltia"
 main = "src/index.js"
 compatibility_date = "2023-03-24"
 
-# Domaines autorisés à utiliser l'authentificateur (wildcards OK).
-# Couvre recette + prod + vitrine. Les secrets GitHub se posent dans le dashboard.
+# Hôtes d'où l'on ouvre le CMS de l'admission (/admin/). Variable publique, pas un secret (DEC-346) :
+# les identifiants OAuth GitHub restent des secrets Cloudflare. Jamais de joker. D-SEC-CMSAUTH-02.
 [vars]
-ALLOWED_DOMAINS = "*.lanem.bj,lanem.bj"
+ALLOWED_DOMAINS = "admissions.lanem.bj"

@@ -7,7 +7,7 @@ Code : worker officiel [`sveltia/sveltia-cms-auth`](https://github.com/sveltia/s
 Connecté à Cloudflare Workers via « Continue with GitHub » → redéploie à chaque push.
 
 ## Variables (dashboard Worker → Settings → Variables and Secrets)
-- `ALLOWED_DOMAINS` = `*.lanem.bj,lanem.bj` (dans wrangler.toml)
+- `ALLOWED_DOMAINS` = `admissions.lanem.bj` (dans wrangler.toml ; chaque hôte qui sert `/admin/`, jamais de joker — D-SEC-CMSAUTH-02)
 - `GITHUB_CLIENT_ID` — **secret** (GitHub OAuth App)
 - `GITHUB_CLIENT_SECRET` — **secret** (GitHub OAuth App)
 
