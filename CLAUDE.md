@@ -1,6 +1,6 @@
 # admission-sveltia — consignes pour les agents
 
-**Rôle :** worker Cloudflare d'authentification OAuth GitHub du CMS Sveltia de l'admission (copie de `sveltia/sveltia-cms-auth` + durcissement XSS)
+**Rôle :** worker Cloudflare d'authentification OAuth GitHub du CMS Sveltia de l'admission (amont `sveltia/sveltia-cms-auth` `7c34594` + une ligne : `serialize()` du message `authorization:…` ; même fichier que `sveltia-cms-auth`)
 **Domaine propriétaire :** admission · **Bench :** —
 **Branche principale :** `main` — on n'y pousse jamais directement : tout passe par une demande de fusion.
 **Registres du domaine (corpus `si-lanem-corpus`) :** `admission/DEC-ADMISSION.md` · `admission/CORRECTIONS-ADMISSION.md`
@@ -39,8 +39,8 @@
 | Apps / paquets | pas de `package.json` ; `wrangler.toml` (`main = "src/index.js"`) |
 | Suites de tests | {{À CONSTATER}} (aucune suite) |
 | Baseline de référence | à re-mesurer (MEP-11) — aucune baseline valide au 10/11/2026 |
-| Dépendances inter-dépôts | consommé par `admission-lanem` (`public/admin/config.yml`, `backend.base_url`) · même code que `sveltia-cms-auth`, plus le durcissement XSS |
-| Pièges connus | ADM-DEBT-16 (registre en retard : le worker est branché) · DEC-346 (secrets OAuth dans le dashboard Cloudflare, jamais dans `wrangler.toml`) · DEC-210 (Sveltia ne porte que l'éditorial) |
+| Dépendances inter-dépôts | consommé par `admission-lanem` (`public/admin/config.yml`, `backend.base_url`) · `src/index.js` identique à celui de `sveltia-cms-auth` (blob `58b5ea0`, MANDAT-04 / MANDAT-05) : un recalage sur l'amont se fait dans les deux dépôts |
+| Pièges connus | D-SEC-CMSAUTH-02 · `src/index.js` = amont `sveltia/sveltia-cms-auth` `7c34594` + une ligne (`serialize()` du message `authorization:…`), le même fichier que `sveltia-cms-auth` : à reporter à chaque recalage · `site_id` est fourni par l'appelant : seul l'hôte de l'origine du message, vérifié dans la popup, prouve le site · `ALLOWED_DOMAINS` = chaque hôte qui sert `/admin/`, jamais `*.lanem.bj`, `*.pages.dev` ni `*.workers.dev` · une fusion sur `main` = mise en ligne (Workers Builds) · ADM-DEBT-16 (registre en retard : le worker est branché) · DEC-346 (identifiants OAuth en **secrets** Cloudflare, jamais dans `wrangler.toml` ; un déploiement efface les variables en clair du tableau de bord) · DEC-210 (Sveltia ne porte que l'éditorial) |
 
 ## 4. Règles apprises (à respecter sans les redécouvrir)
 
